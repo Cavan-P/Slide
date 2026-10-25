@@ -1,54 +1,43 @@
-# sv
+# Slide
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A browser game built with SvelteKit, prerendered to static files and served from a droplet.
 
-## Creating a project
+## Commands
 
-If you're seeing this, you've probably already done this step. Congrats!
+| Command             | What it does                                      |
+| ------------------- | ------------------------------------------------- |
+| `npm run dev`       | Dev server with hot reload                        |
+| `npm run check`     | Type-check Svelte + TS                            |
+| `npm run test:unit` | Vitest in watch mode                              |
+| `npm run lint`      | Prettier + ESLint check (`npm run format` to fix) |
+| `npm run build`     | Static build into `build/`                        |
+| `npm run preview`   | Serve the built `build/` locally                  |
 
-```sh
-# create a new project
-npx sv create my-app
+## Structure
+
+```
+src/
+  app.html            HTML shell every page is injected into
+  app.d.ts            Global TypeScript types for SvelteKit (App.*)
+  routes/             One folder = one URL. SvelteKit's file-based router.
+    +layout.svelte    Wraps every page (global CSS, favicon, shared chrome)
+    +layout.ts        prerender = true → every page is built to static HTML
+    +page.svelte      The "/" page
+    layout.css        Tailwind entry point
+  lib/                Importable code, via the #lib alias (#lib/game/...)
+    game/             Pure game rules + tests. No Svelte.
+    components/       Svelte UI pieces
+    state/            Shared reactive state (.svelte.ts), when needed
+    assets/           Images/fonts imported from code (bundled, hashed)
+static/               Files served as-is at the site root (robots.txt)
+deploy/               Server config + deploy notes (not shipped)
 ```
 
-To recreate this project with the same configuration:
+Each folder under `src/lib/` and `deploy/` has a README explaining what belongs there.
 
-```sh
-# recreate this project
-npx sv@1.1.1 create --template minimal --types ts --add prettier eslint vitest="usages:unit" tailwindcss="plugins:none" sveltekit-adapter="adapter:static" --install npm slide
-```
+## Config files
 
-## Adding features
-
-Add features to your project with `sv add`:
-
-```sh
-npx sv add
-```
-
-For example, to add Tailwind CSS:
-
-```sh
-npx sv add tailwindcss
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
+- `vite.config.ts`: build tool config, SvelteKit adapter (static), Tailwind, Vitest
+- `tsconfig.json`: extends the one SvelteKit generates in `.svelte-kit/`
+- `eslint.config.js`, `prettier.config.js`: linting and formatting
+- `.nvmrc`: Node version (24)
