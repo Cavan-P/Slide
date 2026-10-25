@@ -1,4 +1,4 @@
-import type { RawLevel, Level, Cell, Piece } from './types'
+import type { RawLevel, Level, Cell, Piece, GameState } from './types'
 
 export function parseLevel(raw: RawLevel): Level {
     const cells: Cell[][] = []
@@ -35,5 +35,13 @@ export function parseLevel(raw: RawLevel): Level {
         name: raw.name,
         cells: cells,
         pieceStart: pieces
+    }
+}
+
+export function newGame(level: Readonly<Level>): GameState {
+    return {
+        pieces: level.pieceStart,
+        status: 'start',
+        level: level
     }
 }
