@@ -1,10 +1,11 @@
 <script lang="ts">
 	import levels from '#lib/game/levels.json'
+	import Board from '#lib/components/Board.svelte'
 	import { parseLevel, newGame } from '#lib/game/level.ts'
 
 	const levelArray = levels.levels
 	const level = parseLevel(levelArray[0])
-	const loadedLevel = newGame(level)
+	const currentLevel = newGame(level)
 
 </script>
 
@@ -12,6 +13,4 @@
 	<title>Slide</title>
 </svelte:head>
 
-<div>
-	<pre>{JSON.stringify(loadedLevel, null, 2)}</pre>
-</div>
+<Board game={currentLevel} />
